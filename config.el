@@ -23,3 +23,18 @@
 
 (after! winum-mode
   (winum-mode))
+
+(map! (:map override
+        :i "C-f" #'evil-forward-char
+        :i "C-b" #'evil-backward-char
+        [f8] #'treemacs)
+
+      (:prefix "SPC"
+        :n "be" #'eval-buffer
+        :n "1" #'winum-select-window-1
+        :n "2" #'winum-select-window-2
+        :n "3" #'winum-select-window-3
+        :n "4" #'winum-select-window-4
+        :n "5" #'winum-select-window-5
+        :n "6" #'winum-select-window-6))
+

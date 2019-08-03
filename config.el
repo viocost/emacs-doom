@@ -20,6 +20,8 @@
   (setq deft-org-mode-title-prefix t)
   (setq deft-directory "~/notes"))
 
+(after! '(treemacs dired)
+  (treemacs-icons-dired-mode))
 
 (after! winum-mode
   (winum-mode))

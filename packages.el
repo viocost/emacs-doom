@@ -8,5 +8,6 @@
 
 ;;;; Code:
 (package! treemacs-magit)
+(package! treemacs-icons-dired)
 (package! alpha)
 (package! winum)

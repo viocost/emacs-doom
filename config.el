@@ -27,8 +27,8 @@
   (winum-mode))
 
 (map! (:map override
-        :i "C-f" #'evil-forward-char
-        :i "C-b" #'evil-backward-char
+        :i "C-f" #'right-char
+        :i "C-b" #'left-char
         [f8] #'treemacs)
 
       (:prefix "SPC"

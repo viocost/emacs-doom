@@ -10,33 +10,56 @@
 ;; Full screen
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
-(def-package-hook! deft
-  :pre-config
+(use-package! deft
+  :init
+  (setq deft-directory "~/notes")
   (setq deft-extensions '("txt" "md" "org" "tex"))
   (setq deft-use-filter-string-for-filename t)
   (setq deft-text-mode 'org-mode)
   (setq deft-extensions '("org"))
   (setq deft-new-file-format "%Y-%m-%dT%H%M")
-  (setq deft-org-mode-title-prefix t)
-  (setq deft-directory "~/notes"))
+  (setq deft-directory "~/notes")
+  (setq deft-org-mode-title-prefix t))
+
 
 (after! '(treemacs dired)
   (treemacs-icons-dired-mode))
 
-(after! winum-mode
+(use-package! winum
+  :config
   (winum-mode))
 
 (map! (:map override
         :i "C-f" #'right-char
         :i "C-b" #'left-char
-        [f8] #'treemacs)
 
+        [f8] #'treemacs)
       (:prefix "SPC"
-        :n "be" #'eval-buffer
         :n "1" #'winum-select-window-1
         :n "2" #'winum-select-window-2
         :n "3" #'winum-select-window-3
         :n "4" #'winum-select-window-4
         :n "5" #'winum-select-window-5
-        :n "6" #'winum-select-window-6))
+        :n "6" #'winum-select-window-6
+
+        ;; describe
+        :n "df" #'describe-function
+        :n "dp" #'describe-package
+        :n "dv" #'describe-variable
+        :n "dk" #'describe-key
+        :n "dm" #'describe-mode
+       
+        ;;projectile
+        :n "ps" #'projectile-save-project-buffers
+        ))
+
+(map!   :map python-mode-map
+        :mode python-mode
+        :prefix "SPC"
+        :n "be" #'python-shell-send-buffer)
+
+(map!   :map emacs-lisp-mode-map
+        :mode emacs-lisp-mode
+        :prefix "SPC"
+        :n "be" #'eval-buffer)
 

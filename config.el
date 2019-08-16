@@ -30,10 +30,14 @@
   (winum-mode))
 
 (map! (:map override
-        :i "C-f" #'right-char
-        :i "C-b" #'left-char
-
+        :i  "C-f" #'right-char
+        :i  "C-b" #'left-char
+        :nv "C-j" #'evil-mc-make-cursor-move-next-line
+        :nv "C-k" #'evil-mc-make-cursor-move-prev-line
+        :nv "C-S-j" #'evil-mc-make-and-goto-next-match
+        :nv "C-S-k" #'evil-mc-make-and-goto-prev-match
         [f8] #'treemacs)
+
       (:prefix "SPC"
         :n "1" #'winum-select-window-1
         :n "2" #'winum-select-window-2

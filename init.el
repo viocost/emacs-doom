@@ -8,6 +8,8 @@
 ;; More information about these modules (and what flags they support) can be
 ;; found in modules/README.org.
 
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (doom! :input
        ;;chinese
        ;;japanese
@@ -22,7 +24,7 @@
        deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
-       doom-quit         ; DOOM quit-message prompts when you quit Emacs
+       ;; doom-quit         ; DOOM quit-message prompts when you quit Emacs
        ;;fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE tags
        indent-guides     ; highlighted indent columns
@@ -159,7 +161,7 @@
        ;; should be loaded late.
        :app
        ;;calendar
-       ;;irc              ; how neckbeards socialize
+       irc              ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
        ;;(write            ; emacs as a word processor (latex + org + markdown)

@@ -77,3 +77,5 @@
 
 ;; setting default transaprency to 85
 (transparency 85)
+
+(setq doom-theme 'doom-acario-dark)

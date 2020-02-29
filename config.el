@@ -74,6 +74,9 @@
   (setq deft-org-mode-title-prefix t))
 
 
+(use-package! winum)
+(winum-mode)
+
 (after! '(treemacs dired)
   (treemacs-icons-dired-mode))
 

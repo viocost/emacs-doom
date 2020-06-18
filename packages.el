@@ -62,3 +62,4 @@
 (package! treemacs-magit)
 (package! treemacs-icons-dired)
 (package! winum)
+(package! ob-prolog)

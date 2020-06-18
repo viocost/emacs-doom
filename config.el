@@ -56,7 +56,9 @@
 (setq doom-font (font-spec :family "Source Code Pro" :size 16))
 
 
+
 (setq display-line-numbers-type 'relative)
+
 
 
 ;; Full screen
@@ -88,7 +90,8 @@
         :nv "C-k" #'evil-mc-make-cursor-move-prev-line
         :nv "C-S-j" #'evil-mc-make-and-goto-next-match
         :nv "C-S-k" #'evil-mc-make-and-goto-prev-match
-        [f8] #'treemacs)
+        [f8] #'treemacs
+        "C-;" #'iedit-mode)
 
       (:prefix "SPC"
         :n "1" #'winum-select-window-1
@@ -97,6 +100,15 @@
         :n "4" #'winum-select-window-4
         :n "5" #'winum-select-window-5
         :n "6" #'winum-select-window-6
+        :n "U" #'smerge-keep-upper
+        :n "N" #'smerge-next
+        :n "P" #'smerge-prev
+        :n "B" #'smerge-keep-lower
+
+        ;; refactoring
+        :n "rf" #'iedit-restrict-function
+        :n "rgs" #'+default/search-project
+        :n "rgp" #'+default/search-project-for-symbol-at-point
 
         ;; describe
         :n "df" #'describe-function
@@ -118,6 +130,7 @@
         :mode emacs-lisp-mode
         :prefix "SPC"
         :n "be" #'eval-buffer)
+
 
 (setq org-log-done 'time)
 

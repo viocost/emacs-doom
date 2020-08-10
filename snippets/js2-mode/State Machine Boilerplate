@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: State Machine Boilerplate
+# key: sm
+# --
+new StateMachine(this, {
+            name: "$0",
+            stateMap: {
+
+            }
+
+        }, { msgNotExistMode: StateMachine.Warn, traceLevel: StateMachine.TraceLevel.DEBUG })

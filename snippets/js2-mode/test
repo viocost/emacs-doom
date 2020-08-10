@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: test
+# key: test
+# --
+const mocha = require("mocha")
+const { assert, expect } = require("chai")
+
+describe("$0", ()=>{
+    before(()=>{
+        $1
+    })
+
+    it("$2", ()=>{
+        createVault(vaultsBasePath, "admin")
+        assert(fs.existsSync(path.join(vaultsBasePath, "admin")));
+    })
+
+    after(()=>{
+        $3
+    })
+
+
+})

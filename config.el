@@ -72,66 +72,70 @@
   (setq deft-text-mode 'org-mode)
   (setq deft-extensions '("org"))
   (setq deft-new-file-format "%Y-%m-%dT%H%M")
-  (setq deft-directory "~/notes")
   (setq deft-org-mode-title-prefix t))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (let ((                                                                                              ;;
+;;        '(;; Each group has an implicit boolean OR operator between its selectors.                    ;;
+;;          (:name "Today"  ; Optionally specify section name                                           ;;
+;;                 :time-grid t  ; Items that appear on the time grid                                   ;;
+;;                 :todo "TODAY")  ; Items that have this TODO keyword                                  ;;
+;;          (:name "Important"                                                                          ;;
+;;                 ;; Single arguments given alone                                                      ;;
+;;                 :tag "bills"                                                                         ;;
+;;                 :priority "A")                                                                       ;;
+;;          ;; Set order of multiple groups at once                                                     ;;
+;;          (:order-multi (2 (:name "Shopping in town"                                                  ;;
+;;                                  ;; Boolean AND group matches items that match all subgroups         ;;
+;;                                  :and (:tag "shopping" :tag "@town"))                                ;;
+;;                           (:name "Food-related"                                                      ;;
+;;                                  ;; Multiple args given in list with implicit OR                     ;;
+;;                                  :tag ("food" "dinner"))                                             ;;
+;;                           (:name "Personal"                                                          ;;
+;;                                  :habit t                                                            ;;
+;;                                  :tag "personal")                                                    ;;
+;;                           (:name "Space-related (non-moon-or-planet-related)"                        ;;
+;;                                  ;; Regexps match case-insensitively on the entire entry             ;;
+;;                                  :and (:regexp ("space" "NASA")                                      ;;
+;;                                                ;; Boolean NOT also has implicit OR between selectors ;;
+;;                                                :not (:regexp "moon" :tag "planet")))))               ;;
+;;          ;; Groups supply their own section names when none are given                                ;;
+;;          (:todo "WAITING" :order 8)  ; Set order of this section                                     ;;
+;;          (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")                                  ;;
+;;                 ;; Show this group at the end of the agenda (since it has the                        ;;
+;;                 ;; highest number). If you specified this group last, items                          ;;
+;;                 ;; with these todo keywords that e.g. have priority A would be                       ;;
+;;                 ;; displayed in that group instead, because items are grouped                        ;;
+;;                 ;; out in the order the groups are listed.                                           ;;
+;;                 :order 9)                                                                            ;;
+;;          (:priority<= "B"                                                                            ;;
+;;                       ;; Show this section after "Today" and "Important", because                    ;;
+;;                       ;; their order is unspecified, defaulting to 0. Sections                       ;;
+;;                       ;; are displayed lowest-number-first.                                          ;;
+;;                       :order 1)                                                                      ;;
+;;          ;; After the last group, the agenda will display items that didn't                          ;;
+;;          ;; match any of these groups, with the default order position of 99                         ;;
+;;          )))                                                                                         ;;
+;;   (org-agenda nil "a"))                                                                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (use-package! org-super-agenda                      ;;
+;;   :after org-agenda                                 ;;
+;;   :init                                             ;;
+;;   (setq org-super-agenda-groups '((:auto-group t))) ;;
+;;                                                     ;;
+;;                                                     ;;
+;;   :config                                           ;;
+;;   (org-super-agenda-mode))                          ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 ;;Agenda files
-(setq org-capture-templates
-       '(("t" "todo" entry (file org-default-notes-file)
-	  "* TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)
-	 ("m" "Meeting" entry (file org-default-notes-file)
-	  "* MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t)
-	 ("d" "Diary" entry (file+datetree "~/org/diary.org")
-	  "* %?\n%U\n" :clock-in t :clock-resume t)
-	 ("i" "Idea" entry (file org-default-notes-file)
-	  "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
-	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
-	  "** NEXT %? \nDEADLINE: %t") ))
 
-(let ((org-super-agenda-groups
-       '(;; Each group has an implicit boolean OR operator between its selectors.
-         (:name "Today"  ; Optionally specify section name
-                :time-grid t  ; Items that appear on the time grid
-                :todo "TODAY")  ; Items that have this TODO keyword
-         (:name "Important"
-                ;; Single arguments given alone
-                :tag "bills"
-                :priority "A")
-         ;; Set order of multiple groups at once
-         (:order-multi (2 (:name "Shopping in town"
-                                 ;; Boolean AND group matches items that match all subgroups
-                                 :and (:tag "shopping" :tag "@town"))
-                          (:name "Food-related"
-                                 ;; Multiple args given in list with implicit OR
-                                 :tag ("food" "dinner"))
-                          (:name "Personal"
-                                 :habit t
-                                 :tag "personal")
-                          (:name "Space-related (non-moon-or-planet-related)"
-                                 ;; Regexps match case-insensitively on the entire entry
-                                 :and (:regexp ("space" "NASA")
-                                               ;; Boolean NOT also has implicit OR between selectors
-                                               :not (:regexp "moon" :tag "planet")))))
-         ;; Groups supply their own section names when none are given
-         (:todo "WAITING" :order 8)  ; Set order of this section
-         (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
-                ;; Show this group at the end of the agenda (since it has the
-                ;; highest number). If you specified this group last, items
-                ;; with these todo keywords that e.g. have priority A would be
-                ;; displayed in that group instead, because items are grouped
-                ;; out in the order the groups are listed.
-                :order 9)
-         (:priority<= "B"
-                      ;; Show this section after "Today" and "Important", because
-                      ;; their order is unspecified, defaulting to 0. Sections
-                      ;; are displayed lowest-number-first.
-                      :order 1)
-         ;; After the last group, the agenda will display items that didn't
-         ;; match any of these groups, with the default order position of 99
-         )))
-  (org-agenda nil "a"))
-
-(setq org-agenda-files '("~/agenda"))
+(setq org-agenda-files '("~/notes/agenda"))
 
 (use-package! winum)
 (winum-mode)
@@ -191,6 +195,8 @@
         :n "be" #'eval-buffer)
 
 
+(setq tide-tsserver-executable "/home/kostia/.nvm/versions/node/v13.10.1/lib/node_modules/typescript/bin/tsserver")
+
 (setq org-log-done 'time)
 
 ;; transparency
@@ -202,10 +208,29 @@
 ;; setting default transaprency to 85
 (transparency 85)
 
-(setq doom-theme 'doom-acario-dark)
+
+(setq doom-theme 'doom-dracula)
+(setq doom-themes-treemacs-theme "doom-colors")
+
 
 (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 4)))
 (add-hook 'json-mode-hook
           (lambda ()
             (make-local-variable 'js-indent-level)
             (setq js-indent-level 4)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (after! org-agenda (setq org-capture-templates                                             ;;
+;;         '(("t" "todo" entry (file+headline org-default-notes-file "Tasks")                 ;;
+;;       "** TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)                                  ;;
+;;     ("m" "Meeting" entry (file+headline org-default-notes-file "Meetings")                 ;;
+;;       "** MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t)                      ;;
+;;     ("d" "Diary" entry (file+headline+datetree org-default-notes-file "Diary")             ;;
+;;       "** %?\n%U\n" :clock-in t :clock-resume t)                                           ;;
+;;     ("i" "Islands" entry (file+headline "~/notes/islands-dev-notes.org"  "Captured notes") ;;
+;;       "** %U \n%?" )                                                                       ;;
+;;     ("x" "Xenfit" entry (file+headline "~/notes/2020-04-29t1020.org"  "Captured notes")    ;;
+;;       "** %U \n%?" )                                                                       ;;
+;;     ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")                  ;;
+;;       "** NEXT %? \nDEADLINE: %t"))))                                                      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

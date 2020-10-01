@@ -63,4 +63,4 @@
 (package! treemacs-icons-dired)
 (package! winum)
 (package! ob-prolog)
-(package! org-super-agenda)
+;;(package! org-super-agenda)

@@ -78,21 +78,6 @@
   (setq deft-new-file-format "%Y-%m-%dT%H%M")
   (setq deft-org-mode-title-prefix t))
 
-;; Defines special type of link called to use with zetteldeft
-(org-link-set-parameters
-  "zdlink"
-  :follow (lambda (str) (zetteldeft--search-filename (zetteldeft--lift-id str)))
-  :complete 'efls/zd-complete-link
-  :help-echo "Searches provided ID in Zetteldeft")
-
-
-(defun efls/zd-complete-link ()
-  "Link completion for `tslink' type links"
-  (let* ((file (completing-read "File to link to: "
-                (deft-find-all-files-no-prefix)))
-         (link (zetteldeft--lift-id file)))
-     (unless link (user-error "No file selected"))
-     (concat "zdlink:" link)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (let ((                                                                                              ;;

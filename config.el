@@ -71,13 +71,19 @@
 (use-package! deft
   :init
   (setq deft-directory "~/notes")
-  (setq deft-extensions '("txt" "md" "org" "tex"))
-  (setq deft-use-filter-string-for-filename t)
   (setq deft-text-mode 'org-mode)
-  (setq deft-extensions '("org"))
-  (setq deft-new-file-format "%Y-%m-%dT%H%M")
-  (setq deft-org-mode-title-prefix t))
+  (setq deft-use-filename-as-title nil)
+  (setq deft-extensions '("md" "org")))
 
+  ;;(setq deft-use-filter-string-for-filename t)
+  ;;(setq deft-extensions '("org"))
+  ;;(setq deft-new-file-format "%Y-%m-%dT%H%M")
+  ;;(setq deft-org-mode-title-prefix t))
+
+(use-package! zetteldeft
+  :init
+  (setq zetteldeft-title-prefix "#+TITLE: ")
+  (setq zetteldeft-title-suffix "\n#+TAGS: #unprocessed \n\n"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (let ((                                                                                              ;;
@@ -178,12 +184,11 @@
         :n "rgp" #'+default/search-project-for-symbol-at-point
 
         ;; describe
-        :n "df" #'describe-function
-        :n "dp" #'describe-package
-        :n "dv" #'describe-variable
-        :n "dk" #'describe-key
-        :n "dm" #'describe-mode
-       
+        :n "dd" #'deft
+        :n "dn" #'zetteldeft-new-file
+        :n "dff" #'zetteldeft-find-file
+        :n "dft" #'zetteldeft-search-tag
+
         ;;projectile
         :n "ps" #'projectile-save-project-buffers
         ))

@@ -80,10 +80,11 @@
   ;;(setq deft-new-file-format "%Y-%m-%dT%H%M")
   ;;(setq deft-org-mode-title-prefix t))
 
+
 (use-package! zetteldeft
   :init
   (setq zetteldeft-title-prefix "#+TITLE: ")
-  (setq zetteldeft-title-suffix "\n#+TAGS: #unprocessed \n\n"))
+  (setq zetteldeft-title-suffix "\n#+TAGS: #unprocessed #unfinished \nSOURCE: \n\n"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (let ((                                                                                              ;;
@@ -188,6 +189,8 @@
         :n "dn" #'zetteldeft-new-file
         :n "dff" #'zetteldeft-find-file
         :n "dft" #'zetteldeft-search-tag
+        :n "dlf" #'zetteldeft-follow-link
+        :n "dli" #'zetteldeft-insert-list-links
 
         ;;projectile
         :n "ps" #'projectile-save-project-buffers
@@ -227,6 +230,8 @@
           (lambda ()
             (make-local-variable 'js-indent-level)
             (setq js-indent-level 4)))
+
+(global-undo-tree-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (after! org-agenda (setq org-capture-templates                                             ;;

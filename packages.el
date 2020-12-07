@@ -69,4 +69,5 @@
 (package! jedi)
 (package! company-jedi)
 (package! zetteldeft)
+(package! undo-tree)
 ;;(package! org-super-agenda)

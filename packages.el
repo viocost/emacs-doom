@@ -70,4 +70,5 @@
 (package! company-jedi)
 (package! zetteldeft)
 (package! undo-tree)
+(package! gnuplot)
 ;;(package! org-super-agenda)

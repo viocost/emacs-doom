@@ -162,8 +162,10 @@
         :nv "C-k" #'evil-mc-make-cursor-move-prev-line
         :nv "C-S-j" #'evil-mc-make-and-goto-next-match
         :nv "C-S-k" #'evil-mc-make-and-goto-prev-match
-        "C->" #'evil-window-increase-width
-        "C-<" #'evil-window-decrease-width
+        [S-right] #'evil-window-increase-width
+        [S-left] #'evil-window-decrease-width
+        [S-up] #'evil-window-increase-height
+        [S-down] #'evil-window-decrease-height
         [f8] #'treemacs
         "C-;" #'iedit-mode)
 

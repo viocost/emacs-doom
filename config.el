@@ -50,8 +50,7 @@
 ;; they are implemented.
 ;;; ~/.doom.d/config.el -*- lexical-binding: t; -*-
 
-(after! elpy
-  (elpy-enable))
+;;(after! elpy (elpy-enable))
 
 ;; OLD CONFIG
 
@@ -200,8 +199,10 @@
 
 (map!   :map python-mode-map
         :mode python-mode
-        :prefix "SPC"
-        :n "be" #'python-shell-send-buffer)
+        :n "C-o" #'jedi:goto-definition-pop-marker
+        :n "gd" #'jedi:goto-definition
+        (:prefix "SPC"
+        :n "be" #'python-shell-send-buffer))
 
 (map!   :map emacs-lisp-mode-map
         :mode emacs-lisp-mode
@@ -234,6 +235,9 @@
             (setq js-indent-level 4)))
 
 (global-undo-tree-mode)
+
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (after! org-agenda (setq org-capture-templates                                             ;;

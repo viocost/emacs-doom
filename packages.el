@@ -71,4 +71,5 @@
 (package! zetteldeft)
 (package! undo-tree)
 (package! gnuplot)
+(package! jedi)
 ;;(package! org-super-agenda)

@@ -28,6 +28,38 @@
 ;; If you intend to use org, it is recommended you change this!
 (setq org-directory "~/org/")
 
+;;org-roam
+
+(setq org-roam-directory "~/notes"
+      org-roam-tag-sources '(prop vanilla)
+      org-roam-completion-system 'ido
+      org-roam-capture-templates '(("d" "default" plain (function org-roam--capture-get-point)
+                                   "%?"
+                                   :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                   :head "#+TITLE: ${title}\n#+ROAM_TAGS: unprocessed unfinished\n\n"
+                                   :unnarrowed t)))
+
+(require 'org-roam-protocol)
+
+
+(setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20)
+
+;; If another instance of emacs is already running - the server is already running
+;; and calling this function will cause an error (port already occupied)
+(ignore-errors
+        (org-roam-server-mode))
+
+
 ;; If you want to change the style of line numbers, change this to `relative' or
 ;; `nil' to disable it:
 ;;(setq display-line-numbers-type t)
@@ -69,6 +101,7 @@
 ;; Setting up deft for note taking and a couple of helper functions
 (use-package! deft
   :init
+  ;;(setq deft-directory "~/notes")
   (setq deft-directory "~/notes")
   (setq deft-text-mode 'org-mode)
   (setq deft-use-filename-as-title nil)
@@ -153,6 +186,11 @@
 (after! '(treemacs dired)
   (treemacs-icons-dired-mode))
 
+(defun open-org-roam-graph (str &optional)
+     "Open org-roam graph"
+     (interactive "p")
+     (org-link-open-from-string  "http://127.0.0.1:8080"))
+
 
 (map! (:map override
         :i  "C-f" #'right-char
@@ -187,11 +225,13 @@
 
         ;; describe
         :n "dd" #'deft
-        :n "dn" #'zetteldeft-new-file
-        :n "dff" #'zetteldeft-find-file
-        :n "dft" #'zetteldeft-search-tag
-        :n "dlf" #'zetteldeft-follow-link
-        :n "dli" #'zetteldeft-insert-list-links
+        :n "dn" #'org-roam-find-file
+        :n "dg" #'open-org-roam-graph
+        ;;:n "dff" #'zetteldeft-find-file               ;;:n "dn" #'zetteldeft-new-file
+        ;;:n "dft" #'zetteldeft-search-tag              ;;:n "dff" #'zetteldeft-find-file
+        ;;:n "dlf" #'zetteldeft-follow-link             ;;:n "dft" #'zetteldeft-search-tag
+        ;;:n "dli" #'zetteldeft-insert-list-links       ;;:n "dlf" #'zetteldeft-follow-link
+        ;;:n "dli" #'zetteldeft-insert-list-links
 
         ;;projectile
         :n "ps" #'projectile-save-project-buffers
@@ -209,6 +249,13 @@
         :prefix "SPC"
         :n "be" #'eval-buffer)
 
+
+(map!   :map js2-mode-map
+        :mode js2-mode
+        (:prefix "SPC"
+         :n "eb"  #'nodejs-repl-send-buffer
+         :n "el"  #'nodejs-repl-send-line
+         :v "er"  #'nodejs-repl-send-region))
 
 (setq tide-tsserver-executable nil)
 

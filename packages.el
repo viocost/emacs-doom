@@ -72,4 +72,5 @@
 (package! undo-tree)
 (package! gnuplot)
 (package! jedi)
+(package! org-roam-server)
 ;;(package! org-super-agenda)

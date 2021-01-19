@@ -78,7 +78,7 @@
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       (spell +flyspell)             ; tasing you for misspelling mispelling
+       (spell)             ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
@@ -145,6 +145,7 @@
         ;;+hugo            ; use Emacs for hugo blogging
         +jupyter        ; ipython/jupyter support for babel
         +pandoc          ; export-with-pandoc support
+        +roam
         ;;+pomodoro        ; be fruitful with the tomato technique
         +present)        ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend

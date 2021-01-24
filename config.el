@@ -36,7 +36,7 @@
       org-roam-capture-templates '(("d" "default" plain (function org-roam--capture-get-point)
                                    "%?"
                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                   :head "#+TITLE: ${title}\n#+ROAM_TAGS: unprocessed unfinished\n\n"
+                                   :head "#+TITLE: ${title}\n#+ROAM_TAGS: unprocessed unfinished\n#+SOURCES: \nLINKS:\n\n"
                                    :unnarrowed t)))
 
 (require 'org-roam-protocol)
@@ -192,6 +192,15 @@
      (org-link-open-from-string  "http://127.0.0.1:8080"))
 
 
+(setq org-hide-emphasis-markers t)
+(setq org-hide-block-startup t)
+
+(defun org-toggle-markup ()
+  (interactive "p")
+  (setq org-hide-emphasis-markers (not org-hide-emphasis-markers))
+  (setq org-hide-block-startup (not org-hide-block-startup)))
+
+
 (map! (:map override
         :i  "C-f" #'right-char
         :i  "C-b" #'left-char
@@ -227,6 +236,7 @@
         :n "dd" #'deft
         :n "dn" #'org-roam-find-file
         :n "dg" #'open-org-roam-graph
+        :n "di" #'org-roam-insert
         ;;:n "dff" #'zetteldeft-find-file               ;;:n "dn" #'zetteldeft-new-file
         ;;:n "dft" #'zetteldeft-search-tag              ;;:n "dff" #'zetteldeft-find-file
         ;;:n "dlf" #'zetteldeft-follow-link             ;;:n "dft" #'zetteldeft-search-tag
@@ -250,6 +260,8 @@
         :n "be" #'eval-buffer)
 
 
+
+
 (map!   :map js2-mode-map
         :mode js2-mode
         (:prefix "SPC"
@@ -268,7 +280,7 @@
    (set-frame-parameter (selected-frame) 'alpha value))
 
 ;; setting default transaprency to 85
-(transparency 85)
+(transparency 100)
 
 
 (setq doom-theme 'doom-dracula)
@@ -301,3 +313,31 @@
 ;;     ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")                  ;;
 ;;       "** NEXT %? \nDEADLINE: %t"))))                                                      ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;code execution in babel
+;; All options: https://orgmode.org/manual/Results-of-Evaluation.html#Results-of-Evaluation
+(setq org-babel-default-header-args
+       '((:session . "none")
+        (:results . "replace output") ;; this is how to be in scripting mode when evaluating the code
+        (:exports . "code")
+        (:cache . "no")
+        (:noweb . "no")
+        (:hlines . "no")
+        (:tangle . "no")))
+
+
+;; Faces defines how things look
+;; This is for org metaline, or all lines that start with #+ in org mode
+;;(set-face-attribute 'org-meta-line nil :height 0.7 :slant 'normal)
+;;(set-face-attribute 'org-block-begin-line nil :height 0.7)
+;;(set-face-attribute 'org-block-begin-line nil :height 0.8 :foreground "#000000")
+;;(set-face-attribute 'org-block-end-line nil  :height 0.7 )
+(set-face-attribute 'org-level-1 nil  :height 1.7 )
+(set-face-attribute 'org-level-2 nil  :height 1.3 )
+(set-face-attribute 'org-level-3 nil  :height 1.2 )
+(set-face-attribute 'org-level-4 nil  :height 1.1 )
+(set-face-attribute 'org-level-5 nil  :height 1 )
+(set-face-attribute 'org-level-6 nil  :height 0.9 )
+(set-face-attribute 'org-level-7 nil  :height 0.8 )
+(set-face-attribute 'org-level-8 nil  :height 0.7 )

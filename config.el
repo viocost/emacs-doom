@@ -2,7 +2,23 @@
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; refresh' after modifying this file!
+;; JS block
+(require 'prettier-js)
+(require 'flow-minor-mode)
 
+(after! tide
+  (setq tide-completion-detailed t
+        tide-always-show-documentation t)
+  )
+
+(setq prettier-js-args '(
+  "--trailing-comma" "none"
+  "--parser" "flow"
+  "--semi" "false"
+  "single-quote" "true"
+  ))
+(add-hook! (rjsx-mode js2-mode)
+     #'(prettier-js-mode flow-minor-enable-automatically))
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
@@ -49,6 +65,7 @@
         org-roam-server-serve-files nil
         org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
         org-roam-server-network-poll t
+        org-roam-link-auto-replace nil
         org-roam-server-network-arrows nil
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
@@ -247,12 +264,12 @@
         :n "ps" #'projectile-save-project-buffers
         ))
 
-(map!   :map python-mode-map
-        :mode python-mode
-        :n "C-o" #'jedi:goto-definition-pop-marker
-        :n "gd" #'jedi:goto-definition
-        (:prefix "SPC"
-        :n "be" #'python-shell-send-buffer))
+;;(map!   :map python-mode-map
+;;        :mode python-mode
+;;        :n "C-o" #'jedi:goto-definition-pop-marker
+;;        :n "gd" #'jedi:goto-definition
+;;        (:prefix "SPC"
+;;        :n "be" #'python-shell-send-buffer))
 
 (map!   :map emacs-lisp-mode-map
         :mode emacs-lisp-mode
@@ -287,16 +304,11 @@
 (setq doom-themes-treemacs-theme "doom-colors")
 
 
-(add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 4)))
-(add-hook 'json-mode-hook
-          (lambda ()
-            (make-local-variable 'js-indent-level)
-            (setq js-indent-level 4)))
 
 (global-undo-tree-mode)
 
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;;(add-hook 'python-mode-hook 'jedi:setup)
+;;(setq jedi:complete-on-dot t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (after! org-agenda (setq org-capture-templates                                             ;;
@@ -341,3 +353,37 @@
 (set-face-attribute 'org-level-6 nil  :height 0.9 )
 (set-face-attribute 'org-level-7 nil  :height 0.8 )
 (set-face-attribute 'org-level-8 nil  :height 0.7 )
+
+
+
+;; Rescanning projects directory
+(projectile-cleanup-known-projects)
+(projectile-discover-projects-in-directory "~/projects")
+
+;; Will only work on macos/linux
+(after! counsel
+  (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
+
+;; Default indentation level
+(setq sgml-basic-offset 4)
+
+
+(setq read-process-output-max (* 1024 1024))
+(setq gc-cons-threshold 100000000)
+
+(use-package! company-tabnine
+  :after company
+  :config
+  (cl-pushnew 'company-tabnine (default-value 'company-backends)))
+
+(setq company-tooltip-limit 20)
+(setq company-show-numbers t)
+(setq company-idle-delay 0)
+(setq company-echo-delay 0)
+
+;; ---------- Silver Searcher ------------------
+(setq ag-highlight-search t)
+(setq ag-reuse-window t)
+
+;; -------  Dumb Jump -----------------
+(setq dumb-jump-prefer-searcher 'ag)

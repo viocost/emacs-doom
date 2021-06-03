@@ -15,7 +15,6 @@
   "--trailing-comma" "none"
   "--parser" "flow"
   "--semi" "false"
-  "single-quote" "true"
   ))
 (add-hook! (rjsx-mode js2-mode)
      #'(prettier-js-mode flow-minor-enable-automatically))
@@ -367,6 +366,18 @@
 ;; Default indentation level
 (setq sgml-basic-offset 4)
 
+(setq-default tab-width 4
+              tab-width 4
+              c-basic-offset 4
+              coffee-tab-width 4
+              javascript-2-level 4
+              js-2-level 4
+              js2-basic-offset 4
+              web-mode-markup-2-offset 4
+              web-mode-css-2-offset 4
+              web-mode-code-2-offset 4
+              css-2-offset 4
+              rust-indent-offset 4)
 
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 100000000)

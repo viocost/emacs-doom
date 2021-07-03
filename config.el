@@ -12,12 +12,14 @@
   )
 
 (setq prettier-js-args '(
-  "--trailing-comma" "none"
-  "--parser" "flow"
-  "--semi" "false"
+  "--parser" "typescript"
   ))
+
 (add-hook! (rjsx-mode js2-mode)
      #'(prettier-js-mode flow-minor-enable-automatically))
+
+(add-hook! 'typescript-mode-hook 'prettier-js-mode)
+
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
@@ -47,6 +49,7 @@
 
 (setq org-roam-directory "~/notes"
       org-roam-tag-sources '(prop vanilla)
+      org-roam-link-auto-replace t
       org-roam-completion-system 'ido
       org-roam-capture-templates '(("d" "default" plain (function org-roam--capture-get-point)
                                    "%?"
@@ -61,10 +64,9 @@
         org-roam-server-port 8080
         org-roam-server-authenticate nil
         org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
+        org-roam-server-serve-files t
         org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
         org-roam-server-network-poll t
-        org-roam-link-auto-replace nil
         org-roam-server-network-arrows nil
         org-roam-server-network-label-truncate t
         org-roam-server-network-label-truncate-length 60
@@ -306,6 +308,7 @@
 
 (global-undo-tree-mode)
 
+
 ;;(add-hook 'python-mode-hook 'jedi:setup)
 ;;(setq jedi:complete-on-dot t)
 
@@ -398,3 +401,16 @@
 
 ;; -------  Dumb Jump -----------------
 (setq dumb-jump-prefer-searcher 'ag)
+
+
+(use-package! lsp-metals)
+(use-package! lsp-ui)
+
+;; Enable nice rendering of diagnostics like compile errors.
+(use-package! flycheck
+  :init (global-flycheck-mode))
+
+(use-package! company
+  :hook (scala-mode . company-mode)
+  :config
+  (setq lsp-completion-provider :capf))

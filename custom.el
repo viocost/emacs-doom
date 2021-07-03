@@ -15,3 +15,9 @@
  ;; If there is more than one, they won't work right.
  )
 (put 'projectile-ripgrep 'disabled nil)
+
+(defun test-dnd (event)
+  (messge "Test dnd!")
+  )
+
+(define-key org-mode-map (kbd "<drag-n-drop>") 'test-dnd)

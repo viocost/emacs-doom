@@ -81,3 +81,6 @@
 (package! flow-minor-mode)
 (package! prettier-js)
 (package! ag)
+(package! graphql-mode)
+(package! lsp-metals)
+(package! lsp-ui)

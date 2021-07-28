@@ -366,22 +366,6 @@
 (after! counsel
   (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
 
-;; Default indentation level
-(setq sgml-basic-offset 4)
-
-(setq-default tab-width 4
-              tab-width 4
-              c-basic-offset 4
-              coffee-tab-width 4
-              javascript-2-level 4
-              js-2-level 4
-              js2-basic-offset 4
-              web-mode-markup-2-offset 4
-              web-mode-css-2-offset 4
-              web-mode-code-2-offset 4
-              css-2-offset 4
-              rust-indent-offset 4)
-
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 100000000)
 
@@ -414,3 +398,40 @@
   :hook (scala-mode . company-mode)
   :config
   (setq lsp-completion-provider :capf))
+
+(setq lsp-kotlin-language-server-path "/home/kostia/.local/share/kotlin-language-server/bin/kotlin-language-server")
+
+
+(use-package! lsp
+  :hook (dart-mode)
+  :config
+  (setq lsp-dart-sdk-dir "/opt/flutter/bin/cache/dart-sdk")
+        (setq gc-cons-threshold (* 200 1024 1024)
+        read-process-output-max (* 1024 1024)
+        company-minimum-prefix-length 2
+        lsp-lens-enable nil
+        lsp-enable-links nil
+        lsp-dart-enable-sdk-formatter t
+        lsp-dart-closing-labels t
+        lsp-signature-auto-activate nil))
+
+
+
+
+;; Default indentation level
+(setq sgml-basic-offset 4)
+
+(setq-default tab-width 4
+              tab-width 4
+              c-basic-offset 4
+              coffee-tab-width 4
+              javascript-2-level 4
+              js-2-level 4
+              js2-basic-offset 4
+              web-mode-markup-2-offset 4
+              web-mode-css-2-offset 4
+              web-mode-code-2-offset 4
+              css-2-offset 4
+              standard-indent 4
+              evil-shift-width 4
+              rust-indent-offset 4)

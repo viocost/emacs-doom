@@ -74,6 +74,7 @@
 (package! org-roam-server)
 (package! flutter)
 (package! flutter-l10n-flycheck)
+(package! flycheck-kotlin)
 (package! dart-mode)
 (package! dart-server)
 (package! company-tabnine)
@@ -84,3 +85,4 @@
 (package! graphql-mode)
 (package! lsp-metals)
 (package! lsp-ui)
+(package! lsp-dart)

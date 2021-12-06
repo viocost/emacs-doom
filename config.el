@@ -6,6 +6,7 @@
 (require 'prettier-js)
 (require 'flow-minor-mode)
 
+
 (after! tide
   (setq tide-completion-detailed t
         tide-always-show-documentation t)
@@ -15,10 +16,18 @@
   "--parser" "typescript"
   ))
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((typescript . t)
+   ))
+
 (add-hook! (rjsx-mode js2-mode)
      #'(prettier-js-mode flow-minor-enable-automatically))
 
 (add-hook! 'typescript-mode-hook 'prettier-js-mode)
+
+
+(add-hook! 'lisp-mode 'sly)
 
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
@@ -43,9 +52,7 @@
 (setq doom-theme 'doom-one)
 
 ;; If you intend to use org, it is recommended you change this!
-(setq org-directory "~/org/")
 
-;;org-roam
 
 (setq org-roam-directory "~/notes"
       org-roam-tag-sources '(prop vanilla)
@@ -57,20 +64,22 @@
                                    :head "#+TITLE: ${title}\n#+ROAM_TAGS: unprocessed unfinished\n#+SOURCES: \nLINKS:\n\n"
                                    :unnarrowed t)))
 
-(require 'org-roam-protocol)
+(use-package! org-roam-protocol)
 
 
-(setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8080
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files t
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq org-roam-server-host "127.0.0.1"                              ;;
+        org-roam-server-port 8090                                   ;;
+        org-roam-server-authenticate nil                            ;;
+        org-roam-server-export-inline-images t                      ;;
+        org-roam-server-serve-files t                               ;;
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv") ;;
+        org-roam-server-network-poll t                              ;;
+        org-roam-server-network-arrows nil                          ;;
+        org-roam-server-network-label-truncate t                    ;;
+        org-roam-server-network-label-truncate-length 60            ;;
+        org-roam-server-network-label-wrap-length 20)               ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; If another instance of emacs is already running - the server is already running
 ;; and calling this function will cause an error (port already occupied)
@@ -136,67 +145,7 @@
   (setq zetteldeft-title-prefix "#+TITLE: ")
   (setq zetteldeft-title-suffix "\n#+TAGS: #unprocessed #unfinished \nSOURCE: \n\n"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (let ((                                                                                              ;;
-;;        '(;; Each group has an implicit boolean OR operator between its selectors.                    ;;
-;;          (:name "Today"  ; Optionally specify section name                                           ;;
-;;                 :time-grid t  ; Items that appear on the time grid                                   ;;
-;;                 :todo "TODAY")  ; Items that have this TODO keyword                                  ;;
-;;          (:name "Important"                                                                          ;;
-;;                 ;; Single arguments given alone                                                      ;;
-;;                 :tag "bills"                                                                         ;;
-;;                 :priority "A")                                                                       ;;
-;;          ;; Set order of multiple groups at once                                                     ;;
-;;          (:order-multi (2 (:name "Shopping in town"                                                  ;;
-;;                                  ;; Boolean AND group matches items that match all subgroups         ;;
-;;                                  :and (:tag "shopping" :tag "@town"))                                ;;
-;;                           (:name "Food-related"                                                      ;;
-;;                                  ;; Multiple args given in list with implicit OR                     ;;
-;;                                  :tag ("food" "dinner"))                                             ;;
-;;                           (:name "Personal"                                                          ;;
-;;                                  :habit t                                                            ;;
-;;                                  :tag "personal")                                                    ;;
-;;                           (:name "Space-related (non-moon-or-planet-related)"                        ;;
-;;                                  ;; Regexps match case-insensitively on the entire entry             ;;
-;;                                  :and (:regexp ("space" "NASA")                                      ;;
-;;                                                ;; Boolean NOT also has implicit OR between selectors ;;
-;;                                                :not (:regexp "moon" :tag "planet")))))               ;;
-;;          ;; Groups supply their own section names when none are given                                ;;
-;;          (:todo "WAITING" :order 8)  ; Set order of this section                                     ;;
-;;          (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")                                  ;;
-;;                 ;; Show this group at the end of the agenda (since it has the                        ;;
-;;                 ;; highest number). If you specified this group last, items                          ;;
-;;                 ;; with these todo keywords that e.g. have priority A would be                       ;;
-;;                 ;; displayed in that group instead, because items are grouped                        ;;
-;;                 ;; out in the order the groups are listed.                                           ;;
-;;                 :order 9)                                                                            ;;
-;;          (:priority<= "B"                                                                            ;;
-;;                       ;; Show this section after "Today" and "Important", because                    ;;
-;;                       ;; their order is unspecified, defaulting to 0. Sections                       ;;
-;;                       ;; are displayed lowest-number-first.                                          ;;
-;;                       :order 1)                                                                      ;;
-;;          ;; After the last group, the agenda will display items that didn't                          ;;
-;;          ;; match any of these groups, with the default order position of 99                         ;;
-;;          )))                                                                                         ;;
-;;   (org-agenda nil "a"))                                                                              ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package! org-super-agenda                      ;;
-;;   :after org-agenda                                 ;;
-;;   :init                                             ;;
-;;   (setq org-super-agenda-groups '((:auto-group t))) ;;
-;;                                                     ;;
-;;                                                     ;;
-;;   :config                                           ;;
-;;   (org-super-agenda-mode))                          ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;Agenda files
-
-(setq org-agenda-files '("~/notes/agenda"))
 
 (use-package! winum)
 (winum-mode)
@@ -278,7 +227,10 @@
         :n "be" #'eval-buffer)
 
 
-
+(map!    :map typescript-mode-map
+         :mode typescript-mode
+         :n "gd" #'tide-jump-to-definition
+         :n "C-o" #'tide-jump-back )
 
 (map!   :map js2-mode-map
         :mode js2-mode
@@ -360,7 +312,8 @@
 
 ;; Rescanning projects directory
 (projectile-cleanup-known-projects)
-(projectile-discover-projects-in-directory "~/projects")
+(setq projectile-project-search-path '("~/projects" "~/endpoint"))
+(projectile-discover-projects-in-search-path)
 
 ;; Will only work on macos/linux
 (after! counsel
@@ -369,13 +322,9 @@
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 100000000)
 
-(use-package! company-tabnine
-  :after company
-  :config
-  (cl-pushnew 'company-tabnine (default-value 'company-backends)))
 
-(setq company-tooltip-limit 20)
-(setq company-show-numbers t)
+(setq company-tooltip-limit 15)
+(setq company-show-quick-access t)
 (setq company-idle-delay 0)
 (setq company-echo-delay 0)
 
@@ -387,29 +336,22 @@
 (setq dumb-jump-prefer-searcher 'ag)
 
 
-(use-package! lsp-metals)
-(use-package! lsp-ui)
+;;(use-package! lsp-metals)
+;;(use-package! lsp-ui)
 
 ;; Enable nice rendering of diagnostics like compile errors.
 (use-package! flycheck
   :init (global-flycheck-mode))
-
-(use-package! company
-  :hook (scala-mode . company-mode)
-  :config
-  (setq lsp-completion-provider :capf))
-
-(setq lsp-kotlin-language-server-path "/home/kostia/.local/share/kotlin-language-server/bin/kotlin-language-server")
 
 
 (use-package! lsp
   :hook (dart-mode)
   :config
   (setq lsp-dart-sdk-dir "/opt/flutter/bin/cache/dart-sdk")
-        (setq gc-cons-threshold (* 200 1024 1024)
+        (setq gc-cons-threshold (* 400 1024 1024)
         read-process-output-max (* 1024 1024)
         company-minimum-prefix-length 2
-        lsp-lens-enable nil
+        lsp-lens-enable t
         lsp-enable-links nil
         lsp-dart-enable-sdk-formatter t
         lsp-dart-closing-labels t
@@ -419,19 +361,26 @@
 
 
 ;; Default indentation level
-(setq sgml-basic-offset 4)
+(setq sgml-basic-offset 2)
 
-(setq-default tab-width 4
-              tab-width 4
-              c-basic-offset 4
-              coffee-tab-width 4
-              javascript-2-level 4
-              js-2-level 4
-              js2-basic-offset 4
-              web-mode-markup-2-offset 4
-              web-mode-css-2-offset 4
-              web-mode-code-2-offset 4
-              css-2-offset 4
-              standard-indent 4
-              evil-shift-width 4
-              rust-indent-offset 4)
+(setq tab-width 2
+        tab-width 2
+        c-basic-offset 2
+        coffee-tab-width 2
+        javascript-2-level 2
+        js-2-level 2
+        js2-basic-offset 2
+        web-mode-markup-2-offset 2
+        web-mode-css-2-offset 2
+        web-mode-code-2-offset 2
+        css-2-offset 2
+        standard-indent 2
+        evil-shift-width 2
+        rust-indent-offset 2)
+
+(setq magit-ediff-dwim-show-on-hunks t)
+
+(setq deft-file-limit 30)
+
+(setq httpd-port 8091)
+(setq httpd-root "~/projects/my-site/dist")

@@ -21,8 +21,6 @@
  '((typescript . t)
    ))
 
-(add-hook! (rjsx-mode js2-mode)
-     #'(prettier-js-mode flow-minor-enable-automatically))
 
 (add-hook! 'typescript-mode-hook 'prettier-js-mode)
 
@@ -58,6 +56,7 @@
       org-roam-tag-sources '(prop vanilla)
       org-roam-link-auto-replace t
       org-roam-completion-system 'ido
+      org-roam-db-location "~/notes/.cache.db"
       org-roam-capture-templates '(("d" "default" plain (function org-roam--capture-get-point)
                                    "%?"
                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
@@ -68,17 +67,18 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq org-roam-server-host "127.0.0.1"                              ;;
-        org-roam-server-port 8090                                   ;;
-        org-roam-server-authenticate nil                            ;;
-        org-roam-server-export-inline-images t                      ;;
-        org-roam-server-serve-files t                               ;;
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv") ;;
-        org-roam-server-network-poll t                              ;;
-        org-roam-server-network-arrows nil                          ;;
-        org-roam-server-network-label-truncate t                    ;;
-        org-roam-server-network-label-truncate-length 60            ;;
-        org-roam-server-network-label-wrap-length 20)               ;;
+(setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8090
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files t
+        org-attach-id-dir "~/notes/.attach"
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; If another instance of emacs is already running - the server is already running
@@ -221,6 +221,30 @@
 ;;        (:prefix "SPC"
 ;;        :n "be" #'python-shell-send-buffer))
 
+(defun display-prefix (arg)
+        "Display the value of the raw prefix arg."
+        (interactive "P")
+        (message "%s" arg))
+
+(defun org-latex-preview-in-buffer ()
+    "Enable latex preview for the entire buffer"
+    (interactive)
+    (let ((current-prefix-arg '(16)))
+      (call-interactively 'org-latex-preview)))
+
+
+(defun org-latex-disable-preview-in-buffer ()
+    "Enable latex preview for the entire buffer"
+    (interactive)
+    (let ((current-prefix-arg '(64)))
+      (call-interactively 'org-latex-preview)))
+
+(map! :map org-mode-map
+      :mode org-mode
+      :prefix "SPC"
+      :n "lp" #'org-latex-preview-in-buffer
+      :n "lu" #'org-latex-disable-preview-in-buffer )
+
 (map!   :map emacs-lisp-mode-map
         :mode emacs-lisp-mode
         :prefix "SPC"
@@ -229,8 +253,8 @@
 
 (map!    :map typescript-mode-map
          :mode typescript-mode
-         :n "gd" #'tide-jump-to-definition
-         :n "C-o" #'tide-jump-back )
+         :n "gd" #'xref-find-definitions
+         :n "C-o" #'xref-pop-marker-stack )
 
 (map!   :map js2-mode-map
         :mode js2-mode
@@ -250,7 +274,7 @@
    (set-frame-parameter (selected-frame) 'alpha value))
 
 ;; setting default transaprency to 85
-(transparency 100)
+(transparency 95)
 
 
 (setq doom-theme 'doom-dracula)
@@ -336,28 +360,23 @@
 (setq dumb-jump-prefer-searcher 'ag)
 
 
-;;(use-package! lsp-metals)
-;;(use-package! lsp-ui)
 
 ;; Enable nice rendering of diagnostics like compile errors.
 (use-package! flycheck
   :init (global-flycheck-mode))
 
-
-(use-package! lsp
-  :hook (dart-mode)
-  :config
-  (setq lsp-dart-sdk-dir "/opt/flutter/bin/cache/dart-sdk")
-        (setq gc-cons-threshold (* 400 1024 1024)
-        read-process-output-max (* 1024 1024)
-        company-minimum-prefix-length 2
-        lsp-lens-enable t
-        lsp-enable-links nil
-        lsp-dart-enable-sdk-formatter t
-        lsp-dart-closing-labels t
-        lsp-signature-auto-activate nil))
-
-
+(add-hook 'dart-mode-hook 'lsp)
+(setq lsp-dart-flutter-sdk-dir "~/flutter"
+    flutter-sdk-path "~/flutter"
+    lsp-dart-sdk-dir "~/flutter/bin/cache/dart-sdk"
+    gc-cons-threshold (* 400 1024 1024)
+    read-process-output-max (* 1024 1024)
+    company-minimum-prefix-length 2
+    lsp-lens-enable t
+    lsp-enable-links nil
+    lsp-dart-enable-sdk-formatter t
+    lsp-dart-closing-labels t
+    lsp-signature-auto-activate nil)
 
 
 ;; Default indentation level
@@ -382,5 +401,3 @@
 
 (setq deft-file-limit 30)
 
-(setq httpd-port 8091)
-(setq httpd-root "~/projects/my-site/dist")

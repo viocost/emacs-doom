@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(evil-undo-system 'undo-tree)
  '(package-selected-packages
-   '(projectile logview company-tabnine projectile-ripgrep ripgrep undo-tree company-jedi jedi))
+   '(texfrag pretty-mode pretty-symbols which-key projectile logview company-tabnine projectile-ripgrep ripgrep undo-tree company-jedi jedi))
  '(safe-local-variable-values
    '((magit-todos-exclude-globs "*.map" "node_modules" "public"))))
 (custom-set-faces

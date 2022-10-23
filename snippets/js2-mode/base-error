@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: Base error
-# key: berr 
-# --
-class ${1:BaseErrorName} extends Error{ constructor(data){ super(data); this.name = "$1" } }

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: Err.required
-# key: er
-# --
-Err.required("$0")

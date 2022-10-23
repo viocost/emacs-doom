@@ -1,173 +1,103 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
-;; refresh' after modifying this file!
-;; JS block
-(require 'prettier-js)
-(require 'flow-minor-mode)
-
-
-(after! tide
-  (setq tide-completion-detailed t
-        tide-always-show-documentation t)
-  )
-
-(setq prettier-js-args '(
-  "--parser" "typescript"
-  ))
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((typescript . t)
-   ))
-
-
-(add-hook! 'typescript-mode-hook 'prettier-js-mode)
-
-
-(add-hook! 'lisp-mode 'sly)
+;; sync' after modifying this file!
 
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
+;; clients, file templates and snippets. It is optional.
 (setq user-full-name "Konstantin Y. Rybakov"
       user-mail-address "viocost@gmail.com")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 ;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "monospace" :size 14))
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. These are the defaults.
-(setq doom-theme 'doom-one)
+;; `load-theme' function. This is the default:
+(setq doom-theme 'doom-dracula)
+(setq doom-font (font-spec :family "Source Code Pro" :size 16))
 
-;; If you intend to use org, it is recommended you change this!
-
-
-(setq org-roam-directory "~/notes"
-      org-roam-tag-sources '(prop vanilla)
-      org-roam-link-auto-replace t
-      org-roam-completion-system 'ido
-      org-roam-db-location "~/notes/.cache.db"
-      org-roam-capture-templates '(("d" "default" plain (function org-roam--capture-get-point)
-                                   "%?"
-                                   :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                   :head "#+TITLE: ${title}\n#+ROAM_TAGS: unprocessed unfinished\n#+SOURCES: \nLINKS:\n\n"
-                                   :unnarrowed t)))
-
-(use-package! org-roam-protocol)
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type 'relative)
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8090
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files t
-        org-attach-id-dir "~/notes/.attach"
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; If another instance of emacs is already running - the server is already running
-;; and calling this function will cause an error (port already occupied)
-(ignore-errors
-        (org-roam-server-mode))
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/org/")
 
 
-;; If you want to change the style of line numbers, change this to `relative' or
-;; `nil' to disable it:
-;;(setq display-line-numbers-type t)
-
-
-;; Here are some additional functions/macros that could help you configure Doom:
+;; Whenever you reconfigure a package, make sure to wrap your config in an
+;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
+;;
+;;   (after! PACKAGE
+;;     (setq x y))
+;;
+;; The exceptions to this rule:
+;;
+;;   - Setting file/directory variables (like `org-directory')
+;;   - Setting variables which explicitly tell you to set them before their
+;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+;;   - Setting doom variables (which start with 'doom-' or '+').
+;;
+;; Here are some additional functions/macros that will help you configure Doom.
 ;;
 ;; - `load!' for loading external *.el files relative to this one
-;; - `use-package' for configuring packages
+;; - `use-package!' for configuring packages
 ;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', where Emacs
-;;   looks when you load packages with `require' or `use-package'.
+;; - `add-load-path!' for adding directories to the `load-path', relative to
+;;   this file. Emacs searches the `load-path' when you load packages with
+;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
 ;;
 ;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c g k').
+;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.
+;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+;; etc).
 ;;
-;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
+;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-;;; ~/.doom.d/config.el -*- lexical-binding: t; -*-
 
-;;(after! elpy (elpy-enable))
-
-;; OLD CONFIG
-
-;; Place your private configuration here
-(setq doom-font (font-spec :family "Source Code Pro" :size 16))
-
-
-
-(setq display-line-numbers-type 'relative)
-
-
-
-;; Full screen
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
-
-;; Setting up deft for note taking and a couple of helper functions
-(use-package! deft
-  :init
-  ;;(setq deft-directory "~/notes")
-  (setq deft-directory "~/notes")
-  (setq deft-text-mode 'org-mode)
-  (setq deft-use-filename-as-title nil)
-  (setq deft-extensions '("md" "org")))
-
-  ;;(setq deft-use-filter-string-for-filename t)
-  ;;(setq deft-extensions '("org"))
-  ;;(setq deft-new-file-format "%Y-%m-%dT%H%M")
-  ;;(setq deft-org-mode-title-prefix t))
+;; ORG MODE
+;;code execution in babel
+;; All options: https://orgmode.org/manual/Results-of-Evaluation.html#Results-of-Evaluation
+(setq org-babel-default-header-args
+       '((:session . "none")
+        (:results . "replace output") ;; this is how to be in scripting mode when evaluating the code
+        (:exports . "code")
+        (:cache . "no")
+        (:noweb . "no")
+        (:hlines . "no")
+        (:tangle . "no")))
 
 
-(use-package! zetteldeft
-  :init
-  (setq zetteldeft-title-prefix "#+TITLE: ")
-  (setq zetteldeft-title-suffix "\n#+TAGS: #unprocessed #unfinished \nSOURCE: \n\n"))
-
-
-
-(use-package! winum)
-(winum-mode)
+(setq projectile-project-search-path '("~/projects" "~/cs"))
+(projectile-discover-projects-in-search-path)
 
 (after! '(treemacs dired)
   (treemacs-icons-dired-mode))
 
-(defun open-org-roam-graph (str &optional)
-     "Open org-roam graph"
-     (interactive "p")
-     (org-link-open-from-string  "http://127.0.0.1:8080"))
-
-
-(setq org-hide-emphasis-markers t)
-(setq org-hide-block-startup t)
-
-(defun org-toggle-markup ()
-  (interactive "p")
-  (setq org-hide-emphasis-markers (not org-hide-emphasis-markers))
-  (setq org-hide-block-startup (not org-hide-block-startup)))
-
-
+;; KEYS
 (map! (:map override
         :i  "C-f" #'right-char
         :i  "C-b" #'left-char
@@ -214,31 +144,6 @@
         :n "ps" #'projectile-save-project-buffers
         ))
 
-;;(map!   :map python-mode-map
-;;        :mode python-mode
-;;        :n "C-o" #'jedi:goto-definition-pop-marker
-;;        :n "gd" #'jedi:goto-definition
-;;        (:prefix "SPC"
-;;        :n "be" #'python-shell-send-buffer))
-
-(defun display-prefix (arg)
-        "Display the value of the raw prefix arg."
-        (interactive "P")
-        (message "%s" arg))
-
-(defun org-latex-preview-in-buffer ()
-    "Enable latex preview for the entire buffer"
-    (interactive)
-    (let ((current-prefix-arg '(16)))
-      (call-interactively 'org-latex-preview)))
-
-
-(defun org-latex-disable-preview-in-buffer ()
-    "Enable latex preview for the entire buffer"
-    (interactive)
-    (let ((current-prefix-arg '(64)))
-      (call-interactively 'org-latex-preview)))
-
 (map! :map org-mode-map
       :mode org-mode
       :prefix "SPC"
@@ -262,142 +167,3 @@
          :n "eb"  #'nodejs-repl-send-buffer
          :n "el"  #'nodejs-repl-send-line
          :v "er"  #'nodejs-repl-send-region))
-
-(setq tide-tsserver-executable nil)
-
-(setq org-log-done 'time)
-
-;; transparency
-(defun transparency (value)
-   "Sets the transparency of the frame window. 0=transparent/100=opaque"
-   (interactive "nTransparency Value 0 - 100 opaque:")
-   (set-frame-parameter (selected-frame) 'alpha value))
-
-;; setting default transaprency to 85
-(transparency 95)
-
-
-(setq doom-theme 'doom-dracula)
-(setq doom-themes-treemacs-theme "doom-colors")
-
-
-
-(global-undo-tree-mode)
-
-
-;;(add-hook 'python-mode-hook 'jedi:setup)
-;;(setq jedi:complete-on-dot t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (after! org-agenda (setq org-capture-templates                                             ;;
-;;         '(("t" "todo" entry (file+headline org-default-notes-file "Tasks")                 ;;
-;;       "** TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)                                  ;;
-;;     ("m" "Meeting" entry (file+headline org-default-notes-file "Meetings")                 ;;
-;;       "** MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t)                      ;;
-;;     ("d" "Diary" entry (file+headline+datetree org-default-notes-file "Diary")             ;;
-;;       "** %?\n%U\n" :clock-in t :clock-resume t)                                           ;;
-;;     ("i" "Islands" entry (file+headline "~/notes/islands-dev-notes.org"  "Captured notes") ;;
-;;       "** %U \n%?" )                                                                       ;;
-;;     ("x" "Xenfit" entry (file+headline "~/notes/2020-04-29t1020.org"  "Captured notes")    ;;
-;;       "** %U \n%?" )                                                                       ;;
-;;     ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")                  ;;
-;;       "** NEXT %? \nDEADLINE: %t"))))                                                      ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-;;code execution in babel
-;; All options: https://orgmode.org/manual/Results-of-Evaluation.html#Results-of-Evaluation
-(setq org-babel-default-header-args
-       '((:session . "none")
-        (:results . "replace output") ;; this is how to be in scripting mode when evaluating the code
-        (:exports . "code")
-        (:cache . "no")
-        (:noweb . "no")
-        (:hlines . "no")
-        (:tangle . "no")))
-
-
-;; Faces defines how things look
-;; This is for org metaline, or all lines that start with #+ in org mode
-;;(set-face-attribute 'org-meta-line nil :height 0.7 :slant 'normal)
-;;(set-face-attribute 'org-block-begin-line nil :height 0.7)
-;;(set-face-attribute 'org-block-begin-line nil :height 0.8 :foreground "#000000")
-;;(set-face-attribute 'org-block-end-line nil  :height 0.7 )
-(set-face-attribute 'org-level-1 nil  :height 1.7 )
-(set-face-attribute 'org-level-2 nil  :height 1.3 )
-(set-face-attribute 'org-level-3 nil  :height 1.2 )
-(set-face-attribute 'org-level-4 nil  :height 1.1 )
-(set-face-attribute 'org-level-5 nil  :height 1 )
-(set-face-attribute 'org-level-6 nil  :height 0.9 )
-(set-face-attribute 'org-level-7 nil  :height 0.8 )
-(set-face-attribute 'org-level-8 nil  :height 0.7 )
-
-
-
-;; Rescanning projects directory
-(projectile-cleanup-known-projects)
-(setq projectile-project-search-path '("~/projects" "~/endpoint"))
-(projectile-discover-projects-in-search-path)
-
-;; Will only work on macos/linux
-(after! counsel
-  (setq counsel-rg-base-command "rg -M 240 --with-filename --no-heading --line-number --color never %s || true"))
-
-(setq read-process-output-max (* 1024 1024))
-(setq gc-cons-threshold 100000000)
-
-
-(setq company-tooltip-limit 15)
-(setq company-show-quick-access t)
-(setq company-idle-delay 0)
-(setq company-echo-delay 0)
-
-;; ---------- Silver Searcher ------------------
-(setq ag-highlight-search t)
-(setq ag-reuse-window t)
-
-;; -------  Dumb Jump -----------------
-(setq dumb-jump-prefer-searcher 'ag)
-
-
-
-;; Enable nice rendering of diagnostics like compile errors.
-(use-package! flycheck
-  :init (global-flycheck-mode))
-
-(add-hook 'dart-mode-hook 'lsp)
-(setq lsp-dart-flutter-sdk-dir "~/flutter"
-    flutter-sdk-path "~/flutter"
-    lsp-dart-sdk-dir "~/flutter/bin/cache/dart-sdk"
-    gc-cons-threshold (* 400 1024 1024)
-    read-process-output-max (* 1024 1024)
-    company-minimum-prefix-length 2
-    lsp-lens-enable t
-    lsp-enable-links nil
-    lsp-dart-enable-sdk-formatter t
-    lsp-dart-closing-labels t
-    lsp-signature-auto-activate nil)
-
-
-;; Default indentation level
-(setq sgml-basic-offset 2)
-
-(setq tab-width 2
-        tab-width 2
-        c-basic-offset 2
-        coffee-tab-width 2
-        javascript-2-level 2
-        js-2-level 2
-        js2-basic-offset 2
-        web-mode-markup-2-offset 2
-        web-mode-css-2-offset 2
-        web-mode-code-2-offset 2
-        css-2-offset 2
-        standard-indent 2
-        evil-shift-width 2
-        rust-indent-offset 2)
-
-(setq magit-ediff-dwim-show-on-hunks t)
-
-(setq deft-file-limit 30)
-

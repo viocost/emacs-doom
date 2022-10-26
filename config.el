@@ -156,10 +156,10 @@
         :n "be" #'eval-buffer)
 
 
-(map!    :map typescript-mode-map
-         :mode typescript-mode
-         :n "gd" #'xref-find-definitions
-         :n "C-o" #'xref-pop-marker-stack )
+;; (map!    :map typescript-mode-map
+;;          :mode typescript-mode
+;;          :n "gd" #'xref-find-definitions
+;;          :n "C-o" #'xref-pop-marker-stack )
 
 (map!   :map js2-mode-map
         :mode js2-mode
@@ -167,3 +167,5 @@
          :n "eb"  #'nodejs-repl-send-buffer
          :n "el"  #'nodejs-repl-send-line
          :v "er"  #'nodejs-repl-send-region))
+
+(add-hook! 'vue-mode-hook 'lsp)

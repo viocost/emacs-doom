@@ -94,6 +94,7 @@
 (setq projectile-project-search-path '("~/projects" "~/cs"))
 (projectile-discover-projects-in-search-path)
 
+(setq doom-themes-treemacs-theme "doom-colors")
 (after! '(treemacs dired)
   (treemacs-icons-dired-mode))
 
@@ -129,16 +130,17 @@
         :n "rgs" #'+default/search-project
         :n "rgp" #'+default/search-project-for-symbol-at-point
 
-        ;; describe
+        ;; knowledge base
         :n "dd" #'deft
-        :n "dn" #'org-roam-find-file
-        :n "dg" #'open-org-roam-graph
-        :n "di" #'org-roam-insert
-        ;;:n "dff" #'zetteldeft-find-file               ;;:n "dn" #'zetteldeft-new-file
-        ;;:n "dft" #'zetteldeft-search-tag              ;;:n "dff" #'zetteldeft-find-file
-        ;;:n "dlf" #'zetteldeft-follow-link             ;;:n "dft" #'zetteldeft-search-tag
-        ;;:n "dli" #'zetteldeft-insert-list-links       ;;:n "dlf" #'zetteldeft-follow-link
-        ;;:n "dli" #'zetteldeft-insert-list-links
+        :n "dn" #'org-roam-node-insert
+        :n "dc" #'org-roam-capture
+        :n "dg" #'org-roam-ui-open
+        :n "di" #'org-id-get-create
+        :n "df" #'org-roam-node-find
+        :n "dz" #'org-roam-ui-node-zoom
+        :n "ds" #'org-roam-db-sync
+        :n "dta" #'org-roam-tag-add
+        :n "dtr" #'org-roam-tag-remove
 
         ;;projectile
         :n "ps" #'projectile-save-project-buffers
@@ -169,3 +171,134 @@
          :v "er"  #'nodejs-repl-send-region))
 
 (add-hook! 'vue-mode-hook 'lsp)
+
+
+;; ORG ROAM
+;;
+
+;; (use-package! org-roam-protocol)
+;;
+;;
+;; (setq org-roam-directory "~/notes"
+;;       org-roam-tag-sources '(prop vanilla)
+;;       org-roam-link-auto-replace t
+;;       org-roam-completion-system 'ido
+;;       org-roam-db-location "~/notes/.cache.db"
+;;       org-roam-capture-templates '(("d" "default" plain (function org-roam--capture-get-point)
+;;                                    "%?"
+;;                                    :file-name "%<%Y%m%d%H%M%S>-${slug}"
+;;                                    :head "#+TITLE: ${title}\n#+ROAM_TAGS: unprocessed unfinished\n#+SOURCES: \nLINKS:\n\n"
+;;                                    :unnarrowed t)))
+;; (setq org-roam-server-host "127.0.0.1"
+;;         org-roam-server-port 8090
+;;         org-roam-server-authenticate nil
+;;         org-roam-server-export-inline-images t
+;;         org-roam-server-serve-files t
+;;         org-attach-id-dir "~/notes/.attach"
+;;         org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+;;         org-roam-server-network-poll t
+;;         org-roam-server-network-arrows nil
+;;         org-roam-server-network-label-truncate t
+;;         org-roam-server-network-label-truncate-length 60
+;;         org-roam-server-network-label-wrap-length 20)
+;;
+;; ;;  Setting up deft for note taking and a couple of helper functions
+;;  (use-package! deft
+;;    :init
+;;    ;;(setq deft-directory "~/notes")
+;;    (setq deft-directory "~/notes")
+;;    (setq deft-text-mode 'org-mode)
+;;    (setq deft-use-filename-as-title nil)
+;;    (setq deft-extensions '("md" "org")))
+;;
+;; (after! '(treemacs dired)
+;;   (treemacs-icons-dired-mode))
+
+(setq org-roam-directory (file-truename "~/org-roam"))
+(setq find-file-visit-truename t)
+(org-roam-db-autosync-mode)
+(setq org-roam-database-connector 'sqlite3)
+
+
+(setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t
+        org-attach-id-dir "/home/kostia/org-roam")
+
+
+(map! :map org-mode-map
+        :mode org-mode
+        :prefix "SPC"
+        :n  "sY"  #'org-download-screenshot
+        :n  "sy"  #'org-download-yank )
+
+;;code execution in babel
+;; All options: https://orgmode.org/manual/Results-of-Evaluation.html#Results-of-Evaluation
+(setq org-babel-default-header-args
+       '((:session . "none")
+        (:results . "replace output") ;; this is how to be in scripting mode when evaluating the code
+        (:exports . "code")
+        (:cache . "no")
+        (:noweb . "no")
+        (:hlines . "no")
+        (:tangle . "no")))
+
+(setq company-tooltip-limit 15)
+(setq company-show-quick-access t)
+(setq company-idle-delay 0)
+(setq company-echo-delay 0)
+;; Default indentation level
+(setq sgml-basic-offset 2)
+
+(setq tab-width 2
+        tab-width 2
+        c-basic-offset 2
+        coffee-tab-width 2
+        javascript-2-level 2
+        js-2-level 2
+        js2-basic-offset 2
+        web-mode-markup-2-offset 2
+        web-mode-css-2-offset 2
+        web-mode-code-2-offset 2
+        css-2-offset 2
+        standard-indent 2
+        evil-shift-width 2
+        rust-indent-offset 2)
+
+(setq magit-ediff-dwim-show-on-hunks t)
+
+;; DEFT
+(setq deft-directory "~/org-roam")
+(setq deft-text-mode 'org-mode)
+(setq deft-use-filename-as-title nil)
+(setq deft-extensions '("md" "org"))
+
+(setq deft-file-limit 30)
+(defun cm/deft-parse-title (file contents)
+  "Parse the given FILE and CONTENTS and determine the title.
+  If `deft-use-filename-as-title' is nil, the title is taken to
+  be the first non-empty line of the FILE.  Else the base name of the FILE is
+  used as title."
+ (let ((begin (string-match "^#\\+[tT][iI][tT][lL][eE]: .*$" contents)))
+ (if begin
+  (string-trim (substring contents begin (match-end 0)) "#\\+[tT][iI][tT][lL][eE]: *" "[\n\t ]+")
+  (deft-base-filename file))))
+
+  (advice-add 'deft-parse-title :override #'cm/deft-parse-title)
+
+  (setq deft-strip-summary-regexp
+  (concat "\\("
+  "[\n\t]" ;; blank
+  "\\|^#\\+[[:alpha:]_]+:.*$" ;; org-mode metadata
+  "\\|^:PROPERTIES:\n\\(.+\n\\)+:END:\n"
+  "\\)"))
+
+(set-face-attribute 'org-level-1 nil  :height 1.7 )
+(set-face-attribute 'org-level-2 nil  :height 1.3 )
+(set-face-attribute 'org-level-3 nil  :height 1.2 )
+(set-face-attribute 'org-level-4 nil  :height 1.1 )
+(set-face-attribute 'org-level-5 nil  :height 1 )
+(set-face-attribute 'org-level-6 nil  :height 0.9 )
+(set-face-attribute 'org-level-7 nil  :height 0.8 )
+(set-face-attribute 'org-level-8 nil  :height 0.7 )

@@ -50,3 +50,7 @@
 ;(unpin! t)
 
 (package! vue-mode)
+(package! org-download)
+(package! emacsql-sqlite3)
+(package! org-roam-ui)
+(package! websocket)

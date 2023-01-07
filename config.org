@@ -1,3 +1,9 @@
+#+TITLE: Doom Emacs Config
+#+AUTHOR: Konstantin Y. Rybakov
+
+
+* Basics
+#+begin_src emacs-lisp
 (setq user-full-name "Konstantin Y. Rybakov"
       user-mail-address "viocost@gmail.com")
 
@@ -6,12 +12,18 @@
 
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
+#+end_src
 
+** Autocompletion (company)
+#+begin_src elisp
 (setq company-tooltip-limit 15)
 (setq company-show-quick-access t)
 (setq company-idle-delay 0)
 (setq company-echo-delay 0)
 
+#+end_src
+** Config guide
+#+begin_src elisp
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 
@@ -51,9 +63,16 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+#+end_src
 
+
+* Look
+** Line number
+#+begin_src elisp
 (setq display-line-numbers-type 'relative)
-
+#+end_src
+** Theme
+#+begin_src elisp
 ;; (setq doom-theme 'doom-dracula)
 ;; (setq doom-theme 'doom-ephemeral)
 ;; (setq doom-theme 'doom-material)
@@ -67,8 +86,16 @@
 (add-hook! 'treemacs-mode-hook
            (treemacs-follow-mode))
 
-(setq doom-font (font-spec :family "Source Code Pro" :size 16))
+#+end_src
 
+** Font
+#+begin_src emacs-lisp
+(setq doom-font (font-spec :family "Source Code Pro" :size 16))
+#+end_src
+
+
+* Org-mode
+#+begin_src emacs-lisp
 (setq org-hide-emphasis-markers t)
 (setq org-directory "~/org/")
 (setq org-agenda-files '("/home/kostia/org-roam"))
@@ -86,6 +113,10 @@
 	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
 	  "** NEXT %? \nDEADLINE: %t") ))
 
+
+#+end_src
+** Code bolocs execution
+#+begin_src elisp
 (setq org-babel-default-header-args
        '((:session . "none")
         (:results . "replace output") ;; this is how to be in scripting mode when evaluating the code
@@ -93,7 +124,12 @@
         (:cache . "no")
         (:noweb . "no")
         (:hlines . "no")))
+#+end_src
 
+
+** Look
+
+#+begin_src elisp
 (defun set-org-fonts()
 (set-face-attribute 'org-level-1 nil  :height 1.7 )
     (set-face-attribute 'org-level-2 nil  :height 1.3 )
@@ -106,6 +142,11 @@
 
 (after! org
   (set-org-fonts))
+#+end_src
+
+
+** TODOS
+#+begin_src elisp
 
 (setq org-todo-keywords
         '((sequence "TODO(t)" "PROJ(p)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)" "|" "FOO" )
@@ -113,7 +154,11 @@
         (sequence "|" "OKAY(o)" "YES(y)" "NO(n)")))
 
 (setq org-tags-alist '("CHORE" "TICKET"))
+#+end_src
 
+
+* Org-roam (Zettelkasten)
+#+begin_src elisp
 (setq org-roam-directory (file-truename "~/org-roam"))
 (setq find-file-visit-truename t)
 (org-roam-db-autosync-mode)
@@ -123,6 +168,10 @@
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t
         org-attach-id-dir "/home/kostia/org-roam")
+#+end_src
+
+** Deft
+#+begin_src elisp
 
 (setq deft-directory "~/org-roam")
 (setq deft-text-mode 'org-mode)
@@ -149,8 +198,19 @@
   "\\|^:PROPERTIES:\n\\(.+\n\\)+:END:\n"
   "\\)"))
 
+#+end_src
+
+
+* Projects
+#+begin_src elisp
 (setq projectile-project-search-path '("~/projects" "~/cs"))
 (projectile-discover-projects-in-search-path)
+#+end_src
+
+
+* Magit and vdiff
+** Config
+#+begin_src elisp
 
 (setq magit-ediff-dwim-show-on-hunks t)
 (setq vdiff-default-refinement-syntax-code "w")
@@ -173,10 +233,20 @@
   :background "#004d00"
   :weight bold))
 
+#+end_src
+
+** Key bindings
+#+begin_src elisp
 (map! :map magit-mode-map
       :mode magit-mode
       "e" #'vdiff-magit-dwim
       "E" #'vdiff-magit)
+#+end_src
+
+
+* Key bindings
+** Main
+#+begin_src elisp
 
 (map! (:map override
         :ni  "C-d" #'butter-jump-down
@@ -245,12 +315,20 @@
         :n "il" #'org-insert-link
 
         ))
+#+end_src
 
+
+** Treemacs
+#+begin_src elisp
 (map! :map treemacs-mode-map
       :mode treemacs-mode
       "C-=" #'text-scale-increase
       "C--" #'text-scale-decrease)
+#+end_src
 
+
+** Org-mode
+#+begin_src elisp
 (map! :map org-mode-map
         :mode org-mode
         :prefix "SPC"
@@ -258,12 +336,20 @@
         :n "lu" #'org-latex-disable-preview-in-buffer
         :n  "sY"  #'org-download-screenshot
         :n  "sy"  #'org-download-yank )
+#+end_src
 
+
+** Deft-mode
+#+begin_src elisp
 (map!   :map deft-mode-map
         :mode deft-mode
         "C-=" #'text-scale-increase
         "C--" #'text-scale-decrease)
+#+end_src
 
+
+** Js, ts, web
+#+begin_src elisp
 (map!   :map js2-mode-map
         :mode js2-mode
         (:prefix "SPC"
@@ -271,13 +357,26 @@
          :n "el"  #'nodejs-repl-send-line
          :v "er"  #'nodejs-repl-send-region))
 
+#+end_src
+
+
+** Elisp
+#+begin_src elisp
 (map!   :map emacs-lisp-mode-map
         :mode emacs-lisp-mode
         :prefix "SPC"
         :n "be" #'eval-buffer)
+#+end_src
 
+
+* Typescript
+#+begin_src elisp
 (add-hook! 'typescript-mode-hook 'prettier-js-mode)
+#+end_src
 
+
+* Vue
+#+begin_src elisp
 (use-package! lsp-mode
   :custom
   (lsp-vetur-format-default-formatter-css "none")
@@ -291,6 +390,11 @@
   :config
   (add-hook! 'vue-mode-hook #'lsp)
   (setq prettier-js-args '("--parser vue")))
+#+end_src
+
+
+* Indentation
+#+begin_src elisp
 
 (setq sgml-basic-offset 2)
 
@@ -312,3 +416,4 @@
         rust-indent-offset n))
 
 (setup-indent 2)
+#+end_src

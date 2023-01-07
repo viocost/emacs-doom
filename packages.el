@@ -54,3 +54,17 @@
 (package! emacsql-sqlite3)
 (package! org-roam-ui)
 (package! websocket)
+(package! prettier-js)
+(package! org-super-agenda)
+(package! vdiff)
+(package! vdiff-magit)
+(package! magit-delta)
+(package! diffview)
+(package! lsp-volar :recipe (:host github :repo "jadestrong/lsp-volar"))
+(package! lsp-treemacs)
+(package! butter-jump
+   :recipe (:host github :repo "viocost/butter-jump" ))
+(package! flycheck-package)
+(package! package-lint)
+
+(package! org-ql)

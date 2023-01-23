@@ -152,16 +152,19 @@
 
 * Org-roam (Zettelkasten)
 #+begin_src elisp
-(setq org-roam-directory (file-truename "~/org-roam"))
-(setq find-file-visit-truename t)
-(org-roam-db-autosync-mode)
-(setq org-roam-database-connector 'sqlite3)
-(setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t
-        org-attach-id-dir "/home/kostia/org-roam")
+(after! org-roam
+    (setq org-roam-directory (file-truename "~/org-roam"))
+    (setq find-file-visit-truename t)
+    (org-roam-db-autosync-mode)
+    (setq org-roam-database-connector 'sqlite3)
+    (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start t
+            org-attach-id-dir "/home/kostia/org-roam"))
 #+end_src
+
+#+RESULTS:
 
 ** Deft
 #+begin_src elisp
@@ -353,6 +356,7 @@ and set them as agenda files.
                           :time-grid t
                           :date today
                           :scheduled today
+                          :and (:not (:todo ("DONE")))
                           :order 1)))))
 
           (alltodo "" ((org-agenda-overriding-header "")
@@ -383,7 +387,7 @@ and set them as agenda files.
                                  :tag ("study")
                                  :not (:todo ("DONE"))))
 
-                          (:name "Hobby, side projects, Linux ricing etc."
+                          (:name "Personal"
                            :and (
                                  :tag ("hobby" "personal")
                                  :not (:todo ("DONE"))))
@@ -574,6 +578,8 @@ org-after-todo-state-change-hook
 ** Main
 #+begin_src elisp
 
+
+
 (map! (:map override
         :ni  "C-d" #'butter-jump-down
         :ni  "C-u" #'butter-jump-up
@@ -659,13 +665,27 @@ org-after-todo-state-change-hook
 
 #+RESULTS:
 
+** Evil
+
+#+begin_src elisp
+(map! :map evil-motion-state-map
+      "C-d" #'butter-jump-down
+      "C-u" #'butter-jump-up)
+#+end_src
+
+#+RESULTS:
+
 ** Treemacs
 #+begin_src elisp
 (map! :map treemacs-mode-map
       :mode treemacs-mode
+      "C-d" #'butter-jump-down
+      "C-u" #'butter-jump-up
       "C-=" #'text-scale-increase
       "C--" #'text-scale-decrease)
 #+end_src
+
+#+RESULTS:
 
 
 ** Org-mode

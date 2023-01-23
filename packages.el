@@ -71,10 +71,3 @@
 
 (package! chatgpt
   :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el")))
-
-;; python notebooks
-;; (package! ein)
-;; (package! jupyter
-;;   :recipe (
-;;         :repo "viocost/emacs-jupyter"
-;;         :files (:defaults "Makefile" "widget.html" "js")))

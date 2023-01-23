@@ -108,15 +108,16 @@
 (after! org
   (set-org-fonts))
 
-(setq org-roam-directory (file-truename "~/org-roam"))
-(setq find-file-visit-truename t)
-(org-roam-db-autosync-mode)
-(setq org-roam-database-connector 'sqlite3)
-(setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t
-        org-attach-id-dir "/home/kostia/org-roam")
+(after! org-roam
+    (setq org-roam-directory (file-truename "~/org-roam"))
+    (setq find-file-visit-truename t)
+    (org-roam-db-autosync-mode)
+    (setq org-roam-database-connector 'sqlite3)
+    (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start t
+            org-attach-id-dir "/home/kostia/org-roam"))
 
 (setq deft-directory "~/org-roam")
 (setq deft-text-mode 'org-mode)
@@ -267,6 +268,7 @@
                           :time-grid t
                           :date today
                           :scheduled today
+                          :and (:not (:todo ("DONE")))
                           :order 1)))))
 
           (alltodo "" ((org-agenda-overriding-header "")
@@ -297,7 +299,7 @@
                                  :tag ("study")
                                  :not (:todo ("DONE"))))
 
-                          (:name "Hobby, side projects, Linux ricing etc."
+                          (:name "Personal"
                            :and (
                                  :tag ("hobby" "personal")
                                  :not (:todo ("DONE"))))
@@ -523,8 +525,14 @@
       :nv [?\t] #'isearch-repeat-forward
       :nv [S-?\t] #'isearch-repeat-backward      )
 
+(map! :map evil-motion-state-map
+      "C-d" #'butter-jump-down
+      "C-u" #'butter-jump-up)
+
 (map! :map treemacs-mode-map
       :mode treemacs-mode
+      "C-d" #'butter-jump-down
+      "C-u" #'butter-jump-up
       "C-=" #'text-scale-increase
       "C--" #'text-scale-decrease)
 

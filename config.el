@@ -108,6 +108,10 @@
 (after! org
   (set-org-fonts))
 
+;; (require 'org-tempo)
+;; (add-to-list 'org-structure-template-alist
+;;              '("sj" . "src jupyter-python :session py :tangle "))
+
 (after! org-roam
     (setq org-roam-directory (file-truename "~/org-roam"))
     (setq find-file-visit-truename t)
@@ -180,7 +184,8 @@
         "QA(q!)"
         "|"
         "DONE(d!)"
-        "CANCELLED(c!)")
+        "CANCELLED(c!)"
+        "ON-HOLD(h!)")
 
     (sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d!)" "CANCELLED(c!)")
     (sequence "CHORE(c)" "PROGRESS(p)" "|" "DONE(d!)" "CANCELLED(l!)")
@@ -279,6 +284,13 @@
                            :scheduled today
                            :order 2
                            :face (:background "black"))
+
+                          (:name "PAST DUE"
+                           :deadline past
+                           :scheduled past
+                           :order 2
+                           :face (:background "dark red"))
+
 
                           (:name "Projects"
                            :order 5
@@ -449,6 +461,18 @@
       "e" #'vdiff-magit-dwim
       "E" #'vdiff-magit)
 
+(setq scroll-on-jump-curve 'smooth-out)
+;; Larger value for a more pronounced curve.
+(setq scroll-on-jump-curve-power 8.0)
+
+(defun soft-jump-up()
+    (interactive)
+  (scroll-on-jump (forward-line -30)))
+
+(defun soft-jump-down()
+    (interactive)
+  (scroll-on-jump (forward-line 30)))
+
 (map! (:map override
         :ni  "C-d" #'butter-jump-down
         :ni  "C-u" #'butter-jump-up
@@ -518,6 +542,9 @@
 
         ;; chatgpt
         :nv "dq" #'chatgpt-query
+
+        ;; minimap
+        :nv "tm" #'toggle-minimap-mode
         ))
 
 (map! :map isearch-mode-map
@@ -559,7 +586,7 @@
         :n [C-down] #'org-priority-down
         :n [RET] #'org-todo-next-state
         :prefix "SPC"
-        :n "lp" #'org-latex-preview-in-buffer
+        :n "lp" #'org-latex-preview
         :n "lu" #'org-latex-disable-preview-in-buffer
         :n "sY"  #'org-download-screenshot
         :n "sy"  #'org-download-yank
@@ -650,3 +677,12 @@
 ;;    (julia . t)
 ;;    (python . t)
 ;;    (jupyter . t)))
+
+(defun toggle-minimap-mode()
+  (interactive)
+  (minimap-mode (not minimap-mode)))
+
+(after! minimap
+    (setq minimap-window-location 'right))
+
+(beacon-mode)

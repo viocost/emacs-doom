@@ -1,0 +1,6 @@
+# name: jupyter
+# key: <sj
+# --
+#+begin_src jupyter-python :session py :tangle ${1:`(concat (file-name-sans-extension (file-name-nondirectory (buffer-file-name))) ".py")`}
+$0
+#+end_src

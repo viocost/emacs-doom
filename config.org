@@ -119,6 +119,25 @@
 #+end_src
 
 
+** Latex preview
+#+begin_src elisp
+(defun my/org-enable-latex-preview ()
+  "Enable LaTeX previews in all sections of the current Org file."
+  (interactive)
+  (org-latex-preview '(16)))
+
+(defun my/org-disable-latex-preview ()
+  "Enable LaTeX previews in all sections of the current Org file."
+  (interactive)
+  (org-latex-preview '(64)))
+
+;; This enables latex preview in the buffer by default
+(add-hook 'org-mode-hook #'my/org-enable-latex-preview)
+
+#+end_src
+
+#+RESULTS:
+
 ** Code bolocs execution
 #+begin_src elisp
 (setq org-babel-default-header-args
@@ -265,7 +284,7 @@ and set them as agenda files.
         "|"
         "DONE(d!)"
         "CANCELLED(c!)"
-        "ON-HOLD(h!)")
+        "HOLD(h!)")
 
     (sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d!)" "CANCELLED(c!)")
     (sequence "CHORE(c)" "PROGRESS(p)" "|" "DONE(d!)" "CANCELLED(l!)")
@@ -281,6 +300,7 @@ and set them as agenda files.
       ("QA" :foreground "goldenrod" :weight bold)
       ("IDEA" :foreground "gold" :weight bold)
       ("CANCELLED" :foreground "dim gray" :weight bold)
+      ("HOLD" :foreground "dim gray" :weight bold)
       ("DONE" :foreground "green3" :weight bold)
       ("BLOCKED" :foreground "dark red" :weight bold)
     ;;     ("NEXT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
@@ -394,6 +414,10 @@ and set them as agenda files.
                            :order 3
                            :and (:tag ("ticket") :not (:todo ("DONE"))))
 
+                          (:name "On hold"
+                           :order 3
+                           :and (:tag ("ticket") :todo ("HOLD")))
+
                           (:name "Work, business"
                            :order 4
                            :and (
@@ -418,7 +442,7 @@ and set them as agenda files.
 
 
                           (:name "On hold"
-                           :todo "HOLD"
+                           :todo "ON-HOLD"
                            :order 10)))))))))
 (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
 (defun open-my-agenda()
@@ -748,8 +772,9 @@ org-after-todo-state-change-hook
         :n [C-down] #'org-priority-down
         :n [RET] #'org-todo-next-state
         :prefix "SPC"
-        :n "lp" #'org-latex-preview
-        :n "lu" #'org-latex-disable-preview-in-buffer
+        :n "be" #'org-babel-execute-buffer
+        :n "lp" #'my/org-enable-latex-preview
+        :n "lu" #'my/org-disable-latex-preview
         :n "sY"  #'org-download-screenshot
         :n "sy"  #'org-download-yank
         :n "ts"  #'org-todo
@@ -870,6 +895,9 @@ org-after-todo-state-change-hook
 
 
 * Jupyter
+#+begin_src elisp
+(use-package! ox-ipynb)
+#+end_src
 #+begin_src elisp
 ;; (org-babel-do-load-languages
 ;;  'org-babel-load-languages

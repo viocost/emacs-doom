@@ -15,7 +15,7 @@
      ("s" . "src")
      ("v" . "verse")))
  '(package-selected-packages '(emms-player-simple-mpv rg ag))
- '(warning-suppress-types '((lsp-mode) (lsp-mode) (defvaralias))))
+ '(warning-suppress-types '(((yasnippet zombie)) (lsp-mode) (lsp-mode) (defvaralias))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -87,6 +87,19 @@
 	 ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
 	  "** NEXT %? \nDEADLINE: %t") ))
 
+(defun my/org-enable-latex-preview ()
+  "Enable LaTeX previews in all sections of the current Org file."
+  (interactive)
+  (org-latex-preview '(16)))
+
+(defun my/org-disable-latex-preview ()
+  "Enable LaTeX previews in all sections of the current Org file."
+  (interactive)
+  (org-latex-preview '(64)))
+
+;; This enables latex preview in the buffer by default
+(add-hook 'org-mode-hook #'my/org-enable-latex-preview)
+
 (setq org-babel-default-header-args
        '((:session . "none")
         (:results . "replace output") ;; this is how to be in scripting mode when evaluating the code
@@ -185,7 +198,7 @@
         "|"
         "DONE(d!)"
         "CANCELLED(c!)"
-        "ON-HOLD(h!)")
+        "HOLD(h!)")
 
     (sequence "TODO(t)" "PROGRESS(p)" "|" "DONE(d!)" "CANCELLED(c!)")
     (sequence "CHORE(c)" "PROGRESS(p)" "|" "DONE(d!)" "CANCELLED(l!)")
@@ -201,6 +214,7 @@
       ("QA" :foreground "goldenrod" :weight bold)
       ("IDEA" :foreground "gold" :weight bold)
       ("CANCELLED" :foreground "dim gray" :weight bold)
+      ("HOLD" :foreground "dim gray" :weight bold)
       ("DONE" :foreground "green3" :weight bold)
       ("BLOCKED" :foreground "dark red" :weight bold)
     ;;     ("NEXT" :background "red1" :foreground "black" :weight bold :box (:line-width 2 :style released-button))
@@ -300,6 +314,10 @@
                            :order 3
                            :and (:tag ("ticket") :not (:todo ("DONE"))))
 
+                          (:name "On hold"
+                           :order 3
+                           :and (:tag ("ticket") :todo ("HOLD")))
+
                           (:name "Work, business"
                            :order 4
                            :and (
@@ -324,7 +342,7 @@
 
 
                           (:name "On hold"
-                           :todo "HOLD"
+                           :todo "ON-HOLD"
                            :order 10)))))))))
 (add-hook 'org-agenda-mode-hook 'org-super-agenda-mode)
 (defun open-my-agenda()
@@ -586,8 +604,9 @@
         :n [C-down] #'org-priority-down
         :n [RET] #'org-todo-next-state
         :prefix "SPC"
-        :n "lp" #'org-latex-preview
-        :n "lu" #'org-latex-disable-preview-in-buffer
+        :n "be" #'org-babel-execute-buffer
+        :n "lp" #'my/org-enable-latex-preview
+        :n "lu" #'my/org-disable-latex-preview
         :n "sY"  #'org-download-screenshot
         :n "sy"  #'org-download-yank
         :n "ts"  #'org-todo
@@ -670,6 +689,8 @@
                                         ("improve" . "Please improve the following code.\n\n%s")
                                         ;; your new prompt
                                         ("my-custom-type" . "My custom prompt.\n\n%s")))
+
+(use-package! ox-ipynb)
 
 ;; (org-babel-do-load-languages
 ;;  'org-babel-load-languages

@@ -72,3 +72,5 @@
   :recipe (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el")))
 
 (package! beacon)
+(package! ox-ipynb
+  :recipe (:host github :repo "jkitchin/ox-ipynb"))

@@ -9,7 +9,6 @@
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
 (setq company-tooltip-limit 15)
-(setq company-show-quick-access t)
 (setq company-idle-delay 0)
 (setq company-echo-delay 0)
 
@@ -68,7 +67,7 @@
 (add-hook! 'treemacs-mode-hook
            (treemacs-follow-mode))
 
-(setq doom-font (font-spec :family "Source Code Pro" :size 16))
+(setq doom-font (font-spec :family "Sauce Code Pro Nerd Font" :size 16))
 
 (setq org-hide-emphasis-markers t)
 (setq org-directory "~/org-roam/")
@@ -274,11 +273,11 @@
 (set-face-attribute 'org-super-agenda-header nil :height 1.6 :background "gray14")
 
 (setq org-cycle-separator-lines 2)
-(setq org-agenda-category-icon-alist
-      `(("Work" ,(list (all-the-icons-faicon "cogs")) nil nil :ascent center)
-        ("Personal" ,(list (all-the-icons-material "person")) nil nil :ascent center)
-        ("Calendar" ,(list (all-the-icons-faicon "calendar")) nil nil :ascent center)
-        ("Reading" ,(list (all-the-icons-faicon "book")) nil nil :ascent center)))
+;;(setq org-agenda-category-icon-alist
+;;      `(("Work" ,(list (all-the-icons-faicon "cogs")) nil nil :ascent center)
+;;        ("Personal" ,(list (all-the-icons-material "person")) nil nil :ascent center)
+;;        ("Calendar" ,(list (all-the-icons-faicon "calendar")) nil nil :ascent center)
+;;        ("Reading" ,(list (all-the-icons-faicon "book")) nil nil :ascent center)))
 (setq org-agenda-custom-commands
       '(("z" "Kostia view"
          ((agenda "" ((org-agenda-span 'day)
@@ -450,7 +449,7 @@
 ;;                   (string= (org-entry-get (point) "MARKER") "FOO_BAR"))
 ;;                 'FOO_BAR 'file))
 
-(setq projectile-project-search-path '("~/projects" "~/cs"))
+(setq projectile-project-search-path '("~/projects" "~/heap" "~/cs" "~/cs/app-frontends/apps" "~/cs/app-frontends/libraries" "~/cs/app-frontends/packages" "~/cs/app-frontends" "~cs/app-services/services"))
 (projectile-discover-projects-in-search-path)
 
 (setq magit-ediff-dwim-show-on-hunks t)
@@ -596,6 +595,7 @@
   (let* ((ticket-name(car (last (split-string link "\\/")))))
     (insert (format "TICKET [[%s][%s]] %s :work:ticket:" link ticket-name desc))))
 
+
 (map! :map org-mode-map
         :mode org-mode
         :n [C-right] #'org-todo-next-state
@@ -634,14 +634,12 @@
         :prefix "SPC"
         :n "be" #'eval-buffer)
 
+;; (use-package! typescript-mode
+;;   (dap-node-setup))
 (add-hook! 'typescript-mode-hook 'prettier-js-mode)
 
-(use-package! lsp-mode
-  :custom
-  (lsp-vetur-format-default-formatter-css "none")
-  (lsp-vetur-format-default-formatter-html "none")
-  (lsp-vetur-format-default-formatter-js "none")
-  (lsp-vetur-validation-template nil))
+(use-package! lsp-volar)
+
 
 (use-package! vue-mode
   :mode "\\.vue\\'"
@@ -649,6 +647,12 @@
   :config
   (add-hook! 'vue-mode-hook #'lsp)
   (setq prettier-js-args '("--parser vue")))
+
+(setenv "PATH" (concat (getenv "PATH") ":/home/kostia/.nvm/versions/node/v16.20.1/bin" ":/home/kostia/.cargo/bin"))
+(setq exec-path (append exec-path '("/home/kostia/.nvm/versions/node/v16.20.1/bin")))
+(setq  flycheck-json-jsonlint-executable "jsonlint")
+(setq  flycheck-jsonnet-executable "jsonnet")
+;;(doom-modeline-mode 1)
 
 (defun setup-indent (n)
   (interactive)
@@ -698,12 +702,5 @@
 ;;    (julia . t)
 ;;    (python . t)
 ;;    (jupyter . t)))
-
-(defun toggle-minimap-mode()
-  (interactive)
-  (minimap-mode (not minimap-mode)))
-
-(after! minimap
-    (setq minimap-window-location 'right))
 
 (beacon-mode)

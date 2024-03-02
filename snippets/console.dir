@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
 # name: console.dir
 # uuid:
-# key: trigger-key
+# key: <dir
 # condition: t
 # --
 console.dir()

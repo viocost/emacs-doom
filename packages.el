@@ -49,7 +49,8 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(package! vue-mode)
+
+(package! vue-mode :recipe (:host github :repo "viocost/vue-mode"))
 (package! org-download)
 (package! emacsql-sqlite3)
 (package! org-roam-ui)
@@ -74,3 +75,8 @@
 (package! beacon)
 (package! ox-ipynb
   :recipe (:host github :repo "jkitchin/ox-ipynb"))
+(package! flymake-json)
+(package! dap-node
+  :recipe (:host github :repo "emacs-lsp/dap-mode" :files ("dap-node.el")))
+(package! company-tabnine :recipe (:host github :repo "TommyX12/company-tabnine"))
+(package! bnf-mode)
